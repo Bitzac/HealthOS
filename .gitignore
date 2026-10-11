@@ -1,0 +1,4 @@
+.m/
+.seed/
+*.local.json
+node_modules/
