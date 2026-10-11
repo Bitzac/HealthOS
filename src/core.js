@@ -81,7 +81,7 @@ const REPEATS = { '': '不重复', daily: '每天', weekly: '每周', monthly: '
 
 /* ---------- data: one document per person, their records in sub-collections ---------- */
 const COLS = ['issues', 'vitals', 'labs', 'plans', 'advice'];
-const LSK = { people: 'bos-people', ui: 'bos-ui' };
+const LSK = { people: 'bos-people', ui: 'bos-ui', ex2: 'bos-ex2' };
 const lsRec = (pid, c) => `bos-p-${pid}-${c}`;
 const EX = JSON.parse($('examples').textContent);
 const D = { issues: [], vitals: [], labs: [], plans: [], advice: [], profile: null, people: [] };
@@ -153,6 +153,12 @@ function loadLocal() {
   if (!Array.isArray(ppl)) { // first visit without cloud: show the fictional demo person
     ppl = [{ ...EX.profile, id: 'demo', name: '示例', order: 3 }];
     for (const c of COLS) lsSet(lsRec('demo', c), EX[c]);
+    lsSet(LSK.ex2, 1);
+    for (const x of EX.extra || []) { ppl.push(x.profile); for (const c of COLS) lsSet(lsRec(x.profile.id, c), x[c] || []); }
+    lsSet(LSK.people, ppl);
+  } else if (!lsGet(LSK.ex2)) { // visitors from before the second example: add it once (deleting it later sticks)
+    lsSet(LSK.ex2, 1);
+    for (const x of EX.extra || []) if (!ppl.some(p => p.id === x.profile.id)) { ppl.push(x.profile); for (const c of COLS) lsSet(lsRec(x.profile.id, c), x[c] || []); }
     lsSet(LSK.people, ppl);
   }
   D.people = ppl.map(cleanProfile).filter(Boolean).sort(byOrder);
