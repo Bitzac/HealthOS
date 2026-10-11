@@ -30,7 +30,7 @@ python3 -m http.server    # 打开 http://localhost:8000/
 
 正式版本发布为 claude.ai 私有 Artifact，带云端数据库（读取需查看权限，写入需管理员权限）；只有所有者和被分享的人能打开。
 
-`index.html` 不含 `<html>/<head>/<body>`，发布为 claude.ai Artifact 时由平台补齐。three.js 0.160 从 cdnjs 动态加载。
+`index.html` 以 `<meta charset="utf-8">` 开头，可以直接部署到任意静态托管（如 Cloudflare Workers）；`_headers` 让 Cloudflare 同时在响应头里声明 UTF-8。发布为 claude.ai Artifact 时同样可用。three.js 0.160 从 cdnjs 动态加载。
 
 ## 参考标准
 
